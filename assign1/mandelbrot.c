@@ -15,7 +15,7 @@
 // Add your own #defines here
 
 // Add your own function prototypes here
-
+static complex complexSum(complex c1, complex c2);
 
 
 // Draw a single Mandelbrot tile, by calculating and colouring each of
@@ -60,3 +60,10 @@ void escapeGrid(int grid[TILE_SIZE][TILE_SIZE],
 
 // Add your own functions here.
 // Remember to make them static.
+static complex complexSum(complex c1, complex c2) {
+    complex sum = {
+        .re = c1.re + c2.re,
+        .im = c1.im + c2.im
+    }
+    return sum;
+}
