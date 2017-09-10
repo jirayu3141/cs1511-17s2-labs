@@ -19,8 +19,11 @@
 #define BASE_PIXEL_LENGTH 2
 
 // Add your own function prototypes here
-static complex complexSum(complex c1, complex c2);
-
+static double getPixelLength (z);
+static unsigned long getPower (int base, int exponent);
+static complex getCoords (int x, int y, complex center,
+                          double pixelLength);
+static complex complexSum (complex c1, complex c2);
 
 // Draw a single Mandelbrot tile, by calculating and colouring each of
 // the pixels in the tile.
@@ -73,20 +76,6 @@ void escapeGrid(int grid[TILE_SIZE][TILE_SIZE],
 // Add your own functions here.
 // Remember to make them static.
 
-// Takes in two array indices, the length of a pixel, and the center of
-// the tile, and returns the coordinates in the complex plane (given by
-// a complex number) corresponding to the array indices
-static complex getCoords (int x, int y, complex center,
-                          double pixelLength) {
-    // Translates x and y so (0, 0) is the center of the tile
-    x -= TILE_SIZE / 2;
-    y -= TILE_SIZE / 2;
-    // Gets relative (to the center) and absolute coordinates
-    complex relativeCoords = {x * pixelLength,  y * pixelLength};
-    complex absoluteCoords = complexSum (center, relativeCoords);
-    return absoluteCoords;
-}
-
 // Determines the length of a pixel given a zoom level
 // Pixel length = 2^-z = 1 / 2^z
 static double getPixelLength (z) {
@@ -102,6 +91,20 @@ static unsigned long getPower (int base, int exponent) {
         i++;
     }
     return result;
+}
+
+// Takes in two array indices, the length of a pixel, and the center of
+// the tile, and returns the coordinates in the complex plane (given by
+// a complex number) corresponding to the array indices
+static complex getCoords (int x, int y, complex center,
+                          double pixelLength) {
+    // Translates x and y so (0, 0) is the center of the tile
+    x -= TILE_SIZE / 2;
+    y -= TILE_SIZE / 2;
+    // Gets relative (to the center) and absolute coordinates
+    complex relativeCoords = {x * pixelLength,  y * pixelLength};
+    complex absoluteCoords = complexSum (center, relativeCoords);
+    return absoluteCoords;
 }
 
 // Adds two complex numbers
