@@ -14,18 +14,18 @@
 // Mandelbrot set), and convert it to a color.
 //
 // You have artistic licence here, so make your Mandelbrot look amazing.
-pixel pixelColor(int steps) {
+pixel pixelColor (int steps) {
     pixel color = {
-        .red = 0,
+        .red   = 0,
         .green = 0,
-        .blue = 0
+        .blue  = 0
     };
 
-    if (steps >  MAX_STEPS){
+    if (steps == NO_ESCAPE) {
         color = {
-            .red = 255,
+            .red   = 255,
             .green = 255,
-            .blue = 255
+            .blue  = 255
         };
     }
 
