@@ -14,8 +14,6 @@
 #include "pixelColor.h"
 
 // Add your own #defines here
-#define BOUNDARY 2
-#define BOUNDARY_SQUARED BOUNDARY * BOUNDARY
 #define BASE_PIXEL_LENGTH 2
 
 // Add your own function prototypes here
