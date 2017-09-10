@@ -14,7 +14,8 @@
 #include <assert.h>
 #include "extract.h"
 
-#define SLASHES_BEFORE_TRI 5    // No. of slashes before the triordinate
+#define EPSILON 0.00000000000001 // Gets around floating point precision
+#define SLASHES_BEFORE_TRI 5 // Number of slashes before the triordinate
 #define MAX_LENGTH 18  // Max allowed length of a numString (incl. '\0')
 #define TRUE (1 == 1)
 #define FALSE !(TRUE)
@@ -39,6 +40,10 @@ int main (int argc, char *argv[]) {
     triordinate dat = extract (url);
     
     printf ("dat is (%f, %f, %d)\n", dat.x, dat.y, dat.z);
+    
+    assert (dat.x >=  3.14  - EPSILON && dat.x <=  3.14  + EPSILON);
+    assert (dat.y >= -0.141 - EPSILON && dat.y <= -0.141 + EPSILON);
+    assert (dat.z == 5);
     
     return EXIT_SUCCESS;
 }
