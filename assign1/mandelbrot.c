@@ -50,7 +50,7 @@ void drawMandelbrot (pixel pixels[TILE_SIZE][TILE_SIZE],
     while (y < TILE_SIZE) {
         int x = 0;
         while (x < TILE_SIZE) {
-            pixelColor (grid[y][x]);
+            pixels[y][x] = pixelColor (grid[y][x]);
             x++;
         }
         y++;
