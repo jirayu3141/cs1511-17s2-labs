@@ -36,28 +36,22 @@ static complex complexSum (complex c1, complex c2);
 // `center` is a complex number, representing the center of the tile.
 // `z` is used to calculate the distance between each pixel in the image.
 // Each pixel is 2^(-z) apart from each other.
-void drawMandelbrot(pixel pixels[TILE_SIZE][TILE_SIZE],
-        complex center, int z) {
-    // hint: use this array to store the result from escapeGrid.
+void drawMandelbrot (pixel pixels[TILE_SIZE][TILE_SIZE],
+                     complex center, int z) {
+    // Stores result from escapeGrid
     int grid[TILE_SIZE][TILE_SIZE];
-    escapeGrid(grid, center, z);
+    escapeGrid (grid, center, z);
 
-    // TODO: COMPLETE THIS FUNCTION
     int y = 0;
-    while (y < TILE_SIZE){
+    while (y < TILE_SIZE) {
         int x = 0;
-        while (x < TILE_SIZE){
-            pixelColor(grid[y][x]);
+        while (x < TILE_SIZE) {
+            pixelColor (grid[y][x]);
             x++;
         }
         y++;
     }
-    
-
-
 }
-
-
 
 // Determine the number of steps required to escape the Mandelbrot set,
 // for the given complex number `c`.
@@ -90,7 +84,7 @@ void escapeGrid(int grid[TILE_SIZE][TILE_SIZE],
 // Remember to make them static.
 
 // Determines the length of a pixel given a zoom level
-// Pixel length = 2^-z = 1 / 2^z
+// Pixel length = 2^(-z) = 1 / 2^z
 static double getPixelLength (z) {
     return (1 / getPower (BASE_PIXEL_LENGTH, z));
 }
@@ -115,7 +109,7 @@ static complex getCoords (int x, int y, complex center,
     x -= TILE_SIZE / 2;
     y -= TILE_SIZE / 2;
     // Gets relative (to the center) and absolute coordinates
-    complex relativeCoords = {x * pixelLength,  y * pixelLength};
+    complex relativeCoords = {x * pixelLength, y * pixelLength};
     complex absoluteCoords = complexSum (center, relativeCoords);
     return absoluteCoords;
 }
