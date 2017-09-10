@@ -15,6 +15,8 @@
 #include "pixelColor.c"
 
 // Add your own #defines here
+#define BOUNDARY 2
+#define BOUNDARY_SQUARED BOUNDARY * BOUNDARY
 #define BASE_PIXEL_LENGTH 2
 
 // Add your own function prototypes here
@@ -23,6 +25,8 @@ static unsigned long getPower (int base, int exponent);
 static complex getCoords (int x, int y, complex center,
                           double pixelLength);
 static complex complexSum (complex c1, complex c2);
+static complex complexMultiply (complex c1, complex c2);
+static complex complexSquare (complex c);
 
 // Draw a single Mandelbrot tile, by calculating and colouring each of
 // the pixels in the tile.
@@ -57,9 +61,18 @@ void drawMandelbrot (pixel pixels[TILE_SIZE][TILE_SIZE],
 // for the given complex number `c`.
 int escapeSteps(complex c) {
     int steps = 0;
-
-    // TODO: COMPLETE THIS FUNCTION
-
+    complex z = {0, 0};
+    // Inital step, z=z^2 + c, where z is 0 + 0i.
+    z = complexSum (complexSquare (z), c);
+    // For all values of |z| where |z^2 + c| < 2 AND steps < 256
+    while ((complexSquare(z) <= BOUNDARY_SQUARED) && (steps < MAX_STEPS)) {
+        // Update z with the previous result of z.
+        z = complexSum (complexSquare (z), c);
+        steps++;
+    }
+    if (steps == MAX_STEPS) {
+        steps = NO_ESCAPE;
+    }
     return steps;
 }
 
@@ -122,3 +135,18 @@ static complex complexSum (complex c1, complex c2) {
     };
     return sum;
 }
+
+// Returns the product of two complex numbers
+static complex complexMultiply (complex c1, complex c2) {
+    complex product = {
+        .re = c1.re * c2.re - c1.im * c2.im,
+        .im = c1.im * c2.re + c2.im * c1.re
+    };
+    return product;
+}
+
+// Returns the square of a complex number
+static complex complexSquare (complex c) {
+    return complexMultiply (c, c);
+}
+
