@@ -59,7 +59,7 @@ void drawMandelbrot (pixel pixels[TILE_SIZE][TILE_SIZE],
 
 // Determine the number of steps required to escape the Mandelbrot set,
 // for the given complex number `c`.
-int escapeSteps(complex c) {
+int escapeSteps (complex c) {
     int steps = 0;
     complex z = {0, 0};
     // Inital step, z=z^2 + c, where z is 0 + 0i.
@@ -78,8 +78,8 @@ int escapeSteps(complex c) {
 
 // Fill a grid of TILE_SIZE by TILE_SIZE pixels, with the number of
 // steps each pixel took to escape the Mandelbrot set.
-void escapeGrid(int grid[TILE_SIZE][TILE_SIZE],
-                complex center, int z) {
+void escapeGrid (int grid[TILE_SIZE][TILE_SIZE],
+                 complex center, int z) {
     double pixelLength = getPixelLength (z);
     int y = 0;
     while (y < TILE_SIZE) {
