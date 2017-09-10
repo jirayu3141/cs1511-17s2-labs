@@ -12,6 +12,7 @@
 
 #include "mandelbrot.h"
 #include "pixelColor.h"
+#include "pixelColor.c"
 
 // Add your own #defines here
 #define BASE_PIXEL_LENGTH 2
@@ -39,10 +40,24 @@ void drawMandelbrot(pixel pixels[TILE_SIZE][TILE_SIZE],
         complex center, int z) {
     // hint: use this array to store the result from escapeGrid.
     int grid[TILE_SIZE][TILE_SIZE];
+    escapeGrid(grid, center, z);
 
     // TODO: COMPLETE THIS FUNCTION
+    int y = 0;
+    while (y < TILE_SIZE){
+        int x = 0;
+        while (x < TILE_SIZE){
+            pixelColor(grid[y][x]);
+            x++;
+        }
+        y++;
+    }
+    
+
 
 }
+
+
 
 // Determine the number of steps required to escape the Mandelbrot set,
 // for the given complex number `c`.
@@ -63,7 +78,7 @@ void escapeGrid(int grid[TILE_SIZE][TILE_SIZE],
     while (y < TILE_SIZE) {
         int x = 0;
         while (x < TILE_SIZE) {
-            complex pixelCoords = getCoords (x, y center, pixelLength);
+            complex pixelCoords = getCoords (x, y, center, pixelLength);
             grid[y][x] = escapeSteps (pixelCoords);
             x++;
         }

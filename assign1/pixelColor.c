@@ -21,7 +21,14 @@ pixel pixelColor(int steps) {
         .blue = 0
     };
 
-    // COMPLETE THIS FUNCTION
+    if (steps >  MAX_STEPS){
+        color = {
+            .red = 255,
+            .green = 255,
+            .blue = 255
+        };
+    }
 
     return color;
 }
+
