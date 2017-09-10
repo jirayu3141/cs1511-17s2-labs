@@ -62,8 +62,6 @@ void drawMandelbrot (pixel pixels[TILE_SIZE][TILE_SIZE],
 int escapeSteps (complex c) {
     int steps = 0;
     complex z = {0, 0};
-    // Inital step, z=z^2 + c, where z is 0 + 0i.
-    z = complexSum (complexSquare (z), c);
     // For all values of |z| where |z^2 + c| < 2 AND steps < 256
     while ((complexSquare(z) <= BOUNDARY_SQUARED) && (steps < MAX_STEPS)) {
         // Update z with the previous result of z.
