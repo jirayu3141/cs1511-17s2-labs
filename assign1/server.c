@@ -115,7 +115,6 @@ void showRequest (int number, char request[REQUEST_BUFFER_SIZE]) {
 
 // start the server listening on the specified port number
 int makeServerSocket (int portNumber) {
-    printf("Hello!\n"); // DEBUGGING
     // create socket
     int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (serverSocket < 0) {
