@@ -22,11 +22,9 @@ pixel pixelColor (int steps) {
     };
 
     if (steps == NO_ESCAPE) {
-        color = {
-            .red   = 255,
-            .green = 255,
-            .blue  = 255
-        };
+        color.red   = 255;
+        color.green = 255;
+        color.blue  = 255;
     }
 
     return color;
