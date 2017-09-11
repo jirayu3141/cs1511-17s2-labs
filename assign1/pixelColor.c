@@ -11,23 +11,21 @@
 #include "mandelbrot.h"
 #include "pixelColor.h"
 
-// Add a colour ID for each range
-#define RANGE_1_COLOR  1
-
-
 // Adjust and add more step ranges here
 // Make sure they don't overlap!
 #define RANGE_1_LOWER   1
 #define RANGE_1_UPPER 255
 
+// Colours - add more of them:
+//                R    G    B
+#define BLACK   {  0,   0,   0}
+#define WHITE   {255, 255, 255}
+
+// Add a colour ID for each range
+#define RANGE_1_COLOR   WHITE
 
 // Function Prototypes
 pixel getColor (int colorID);
-
-// Add more colors here:
-//    color name      R    G    B     Color ID
-pixel black       = {  0,   0,   0};  //     0
-pixel white       = {255, 255, 255};  //     1
 
 
 // This function should take a number (of steps taken to escape the
@@ -44,22 +42,8 @@ pixel pixelColor (int steps) {
         
         // Add a new condition for each step range that you add
     } else if (steps >= RANGE_1_LOWER && steps <= RANGE_1_UPPER) {
-        color = getColor (RANGE_1_COLOR);
+        color = RANGE_1_COLOR;
     } 
-    
-    
-    return color;
-}
-
-// Takes a colorID and returns the color corresponding to it.
-pixel getColor (int colorID) {
-
-    pixel color = black; // Initialisation
-    
-    // Add a new condition for each color that you add
-    if (colorID == 1) {
-        color = white;
-    }
     
     
     return color;
