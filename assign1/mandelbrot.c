@@ -101,8 +101,8 @@ static double getPixelLength (int z) {
 }
 
 // Takes a base and exponent and returns base^exponent
-static unsigned long getPower (int base, int exponent) {
-    int result = 1;
+static unsigned long long getPower (int base, int exponent) {
+    unsigned long long result = 1;
     int i = 0;
     while (i < exponent) {
         result *= base;
