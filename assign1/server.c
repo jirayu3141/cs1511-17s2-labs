@@ -171,7 +171,11 @@ int waitForConnection (int serverSocket) {
 // Takes in a string that contains the requested URL, and parses it to
 // determine what response to send back to the browser.
 void routeRequest(int socket, char requestBuffer[REQUEST_BUFFER_SIZE]) {
-    // TODO: COMPLETE THIS FUNCTION
+    int z = 0;
+    double x = 0;
+    double y = 0;
+    sscanf (requestBuffer, "http://almondbread.cse.unsw.edu.au/mandelbrot/2/%d/%lf/%lf/tile.bmp", &z, &x, &y);
+    serveImage (socket, x, y, z);
 }
 
 // Serve the tile image
