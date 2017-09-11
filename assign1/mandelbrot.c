@@ -7,7 +7,6 @@
 //
 // Modified on 2017-09-08
 // Tutor: Stephen Leung (fri09-kora)
-//hello
 
 // Add your own #includes here
 
