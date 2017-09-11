@@ -27,6 +27,7 @@ static complex getCoords (int x, int y, complex center,
 static complex complexSum (complex c1, complex c2);
 static complex complexMultiply (complex c1, complex c2);
 static complex complexSquare (complex c);
+static double complexModSquared (complex c);
 
 // Draw a single Mandelbrot tile, by calculating and colouring each of
 // the pixels in the tile.
@@ -61,7 +62,7 @@ void drawMandelbrot (pixel pixels[TILE_SIZE][TILE_SIZE],
 // for the given complex number `c`.
 int escapeSteps (complex c) {
     int steps = 0;
-    complex z = {0,0};
+    complex z = c;
     // For all values of |z| where |z^2 + c| < 2 AND steps < 256
     while ((complexSquare(z) <= BOUNDARY_SQUARED) && (steps < MAX_STEPS)) {
         // Update z with the previous result of z.
@@ -148,3 +149,6 @@ static complex complexSquare (complex c) {
     return complexMultiply (c, c);
 }
 
+static double complexModSquared (complex c) {
+    return c.re * c.re + c.im * c.im;
+}
