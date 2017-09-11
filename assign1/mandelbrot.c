@@ -12,7 +12,6 @@
 
 #include "mandelbrot.h"
 #include "pixelColor.h"
-#include "pixelColor.c"
 
 // Add your own #defines here
 #define BOUNDARY 2
@@ -20,7 +19,7 @@
 #define BASE_PIXEL_LENGTH 2
 
 // Add your own function prototypes here
-static double getPixelLength (z);
+static double getPixelLength (int z);
 static unsigned long getPower (int base, int exponent);
 static complex getCoords (int x, int y, complex center,
                           double pixelLength);
@@ -64,7 +63,7 @@ int escapeSteps (complex c) {
     int steps = 0;
     complex z = {0, 0};
     // For all values of |z| where |z^2 + c| < 2 AND steps < 256
-    while ((complexSquare(z) <= BOUNDARY_SQUARED) && (steps < MAX_STEPS)) {
+    while ((complexModSquared (z) <= BOUNDARY_SQUARED) && (steps < MAX_STEPS)) {
         // Update z with the previous result of z.
         z = complexSum (complexSquare (z), c);
         steps++;
@@ -97,7 +96,7 @@ void escapeGrid (int grid[TILE_SIZE][TILE_SIZE],
 
 // Determines the length of a pixel given a zoom level
 // Pixel length = 2^(-z) = 1 / 2^z
-static double getPixelLength (z) {
+static double getPixelLength (int z) {
     return (1 / getPower (BASE_PIXEL_LENGTH, z));
 }
 
@@ -128,7 +127,7 @@ static complex getCoords (int x, int y, complex center,
 
 // Adds two complex numbers
 static complex complexSum (complex c1, complex c2) {
-    complex sum =
+    complex sum = {
         .re = c1.re + c2.re,
         .im = c1.im + c2.im
     };
