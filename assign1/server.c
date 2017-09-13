@@ -10,7 +10,7 @@
 
 // Acknowledgements:
 // The serveHTML function that delivers the interactive Mandelbrot
-// viewer was written by Andrew Bennett and was shared on WebCMS3.
+// viewer was written by Andrew Bennett and shared on WebCMS3.
 
 // Originally by Richard Buckland 28/01/11, 30/3/14.
 // Licensed under Creative Commons SA-BY-NC 3.0, share freely.
@@ -24,6 +24,7 @@
 #include <netinet/in.h>
 #include <unistd.h>
 #include <math.h>
+#include <signal.h>
 #include "mandelbrot.h"
 
 #define SIMPLE_SERVER_VERSION 3.0
@@ -60,7 +61,9 @@ void sendBitmapHeader (int socket);
 void sendImage(int socket, pixel pixels[TILE_SIZE][TILE_SIZE]);
 
 int main (int argc, char* argv[]) {
-
+    
+    signal(SIGPIPE, SIG_IGN);
+    
     printf("[SERVER] Starting Mandelbrot server %.2f\n", SIMPLE_SERVER_VERSION);
     printf("[SERVER] Access this server at http://localhost:%d/\n", DEFAULT_PORT);
     printf("[SERVER] Waiting for requests...\n");
