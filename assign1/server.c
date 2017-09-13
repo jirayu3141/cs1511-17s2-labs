@@ -8,6 +8,10 @@
 // Modified on 2017-09-11
 // Tutor: Stephen Leung (fri09-kora)
 
+// Acknowledgements:
+// The serveHTML function that delivers the interactive Mandelbrot
+// viewer was written by Andrew Bennett and was shared on WebCMS3.
+
 // Originally by Richard Buckland 28/01/11, 30/3/14.
 // Licensed under Creative Commons SA-BY-NC 3.0, share freely.
 //
@@ -24,7 +28,7 @@
 
 #define SIMPLE_SERVER_VERSION 3.0
 #define REQUEST_BUFFER_SIZE 1000
-#define DEFAULT_PORT 1511
+#define DEFAULT_PORT 2017
 // after serving this many pages+images the server will halt
 #define NUMBER_OF_PAGES_TO_SERVE 1024
 
@@ -49,6 +53,7 @@ void routeRequest(int socket, char requestBuffer[REQUEST_BUFFER_SIZE]);
 void serveIndex(int socket);
 void sendHtmlHeader(int socket);
 void serveImage(int socket, double x, double y, int z);
+static void serveHTML (int socket);
 
 // Write an image to output
 void sendBitmapHeader (int socket);
@@ -56,8 +61,7 @@ void sendImage(int socket, pixel pixels[TILE_SIZE][TILE_SIZE]);
 
 int main (int argc, char* argv[]) {
 
-    printf("[SERVER] Starting simple server %.2f\n", SIMPLE_SERVER_VERSION);
-    printf("[SERVER] Serving poetry since 2011\n");
+    printf("[SERVER] Starting Mandelbrot server %.2f\n", SIMPLE_SERVER_VERSION);
     printf("[SERVER] Access this server at http://localhost:%d/\n", DEFAULT_PORT);
     printf("[SERVER] Waiting for requests...\n");
 
@@ -171,13 +175,23 @@ int waitForConnection (int serverSocket) {
 // Takes in a string that contains the requested URL, and parses it to
 // determine what response to send back to the browser.
 void routeRequest(int socket, char requestBuffer[REQUEST_BUFFER_SIZE]) {
-    int z;
-    double x, y;
-    char trashString[1000];
-    // printf("requestBuffer: %s\n", requestBuffer);
-    sscanf (requestBuffer, "GET /mandelbrot/2/%d/%lf/%lf/tile.bmp%s",
-            &z, &x, &y, trashString);
-    serveImage (socket, x, y, z);
+    int z = 0;
+    double x = 0, y = 0;
+    // This is the format of the requestBuffer
+    char *format = "GET /mandelbrot/2/%d/%lf/%lf/tile.bmp HTTP/1.1";
+    
+    // Attempts to scan in z, x, and y from requestBuffer - this will
+    // work if the user enters in a URL with the structure http://
+    // localhost:1511/mandelbrot/2/z/x/y/tile.bmp
+    if (sscanf (requestBuffer, format, &z, &x, &y) == 3) {
+        serveImage (socket, x, y, z);
+        
+        // If sscanf was not successful (i.e. if the values are invalid,
+        // such as 'abc' or the user typed in http://localhost:1511), 
+        // the code will automatically deliver the viewer instead.
+    } else {
+        serveHTML (socket);
+    }
 }
 
 // Serve the tile image
@@ -187,7 +201,7 @@ void serveImage(int socket, double x, double y, int z) {
 
     complex center;
     center.re = x;
-    center.im = -y;
+    center.im = y;
     drawMandelbrot(pixels, center, z);
 
     // Send the image to the client
@@ -280,4 +294,24 @@ void sendImage(int socket, pixel pixels[TILE_SIZE][TILE_SIZE]) {
 
     // Send the header
     send (socket, pixelBuffer, pixelData, 0);
+}
+
+
+// Serves the interactive viewer
+// (Code written by Andrew Bennett)
+static void serveHTML (int socket) {
+    char* message;
+    
+    // Sends HTTP response header
+    message = "HTTP/1.0 200 Found\n"
+              "Content-Type: text/html\n"
+              "\n";
+    printf ("About to send => %s", message);
+    write (socket, message, strlen (message));
+    
+    // Delivers the interactive viewer
+    message = "<script src=\"http://almondbread.cse."
+              "unsw.edu.au/tiles.js\"></script>"
+              "\n";
+    write (socket, message, strlen (message));
 }
