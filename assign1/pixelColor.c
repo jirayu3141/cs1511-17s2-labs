@@ -31,17 +31,6 @@
 // You have artistic licence here, so make your Mandelbrot look amazing.
 pixel pixelColor (int steps) {
     
-    pixel color = BLACK; // Initialisation
-    
-    // Numbers inside the Mandelbrot set are coloured black.
-    if (steps == NO_ESCAPE) {
-        color = BLACK;
-        
-        // Add a new condition for each step range that you add
-    } else if (steps >= RANGE_1_LOWER && steps <= RANGE_1_UPPER) {
-        color = RANGE_1_COLOR;
-    } 
-    
-    
+    pixel color = {255, 255, 0};
     return color;
 }
