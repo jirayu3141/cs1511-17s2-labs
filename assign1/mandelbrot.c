@@ -19,10 +19,12 @@
 #define BASE_PIXEL_LENGTH 2
 
 // Add your own function prototypes here
-static double getPixelLength (int z);
-static unsigned long getPower (int base, int exponent);
+static int bounded (complex z);
+static complex iterateMandelbrot (complex z, complex c);
+static long double getPixelLength (int z);
+static unsigned long long getPower (int base, int exponent);
 static complex getCoords (int x, int y, complex center,
-                          double pixelLength);
+                          long double pixelLength);
 static complex complexSum (complex c1, complex c2);
 static complex complexMultiply (complex c1, complex c2);
 static complex complexSquare (complex c);
@@ -46,6 +48,7 @@ void drawMandelbrot (pixel pixels[TILE_SIZE][TILE_SIZE],
     int grid[TILE_SIZE][TILE_SIZE];
     escapeGrid (grid, center, z);
 
+    // Sets each pixel in the tile to a color
     int y = 0;
     while (y < TILE_SIZE) {
         int x = 0;
@@ -61,11 +64,12 @@ void drawMandelbrot (pixel pixels[TILE_SIZE][TILE_SIZE],
 // for the given complex number `c`.
 int escapeSteps (complex c) {
     int steps = 0;
-    complex z = {0, 0};
-    // For all values of |z| where |z^2 + c| < 2 AND steps < 256
-    while ((complexModSquared (z) <= BOUNDARY_SQUARED) && (steps < MAX_STEPS)) {
-        // Update z with the previous result of z.
-        z = complexSum (complexSquare (z), c);
+    complex z = {0, 0}; // z starts at 0 + 0i
+    
+    // Continues to iterate the Mandelbrot function as
+    // long as z remains bounded and steps < MAX_STEPS
+    while (bounded (z) && (steps < MAX_STEPS)) {
+        z = iterateMandelbrot (z, c);
         steps++;
     }
     if (steps == MAX_STEPS) {
@@ -78,12 +82,19 @@ int escapeSteps (complex c) {
 // steps each pixel took to escape the Mandelbrot set.
 void escapeGrid (int grid[TILE_SIZE][TILE_SIZE],
                  complex center, int z) {
-    double pixelLength = getPixelLength (z);
+    // Gets the length of a pixel from zoom level
+    long double pixelLength = getPixelLength (z);
+    
     int y = 0;
     while (y < TILE_SIZE) {
         int x = 0;
         while (x < TILE_SIZE) {
+            // Finds the coordinates in the complex plane of a pixel in
+            // the tile (given by x and y)
             complex pixelCoords = getCoords (x, y, center, pixelLength);
+            
+            // Gets the result of escapeSteps for the coordinates of
+            // this pixel and stores it in its position in grid.
             grid[y][x] = escapeSteps (pixelCoords);
             x++;
         }
@@ -94,9 +105,20 @@ void escapeGrid (int grid[TILE_SIZE][TILE_SIZE],
 // Add your own functions here.
 // Remember to make them static.
 
-// Determines the length of a pixel given a zoom level
+// Determines whether z is bounded (i.e., tests if
+// |z| <= 2 by testing the equivalent if |z|^2 <= 4)
+static int bounded (complex z) {
+    return complexModSquared (z) <= BOUNDARY_SQUARED;
+}
+
+// Performs one iteration of the Mandelbrot function on z
+static complex iterateMandelbrot (complex z, complex c) {
+    return complexSum (complexSquare (z), c);
+}
+
+// Determines the length of a pixel from a zoom level
 // Pixel length = 2^(-z) = 1 / 2^z
-static double getPixelLength (int z) {
+static long double getPixelLength (int z) {
     return (1.0 / getPower (BASE_PIXEL_LENGTH, z));
 }
 
@@ -115,12 +137,14 @@ static unsigned long long getPower (int base, int exponent) {
 // the tile, and returns the coordinates in the complex plane (given by
 // a complex number) corresponding to the array indices
 static complex getCoords (int x, int y, complex center,
-                          double pixelLength) {
+                          long double pixelLength) {
     // Translates x and y so (0, 0) is the center of the tile
     x -= TILE_SIZE / 2;
     y -= TILE_SIZE / 2;
-    // Gets relative (to the center) and absolute coordinates
+    // Gets the coordinates relative to the centre of the tile
     complex relativeCoords = {x * pixelLength, y * pixelLength};
+    // Adds the centre coordinates to get absolute coordinates
+    // (which are relative to the centre of the complex plane)
     complex absoluteCoords = complexSum (center, relativeCoords);
     return absoluteCoords;
 }
@@ -148,6 +172,8 @@ static complex complexSquare (complex c) {
     return complexMultiply (c, c);
 }
 
+// Returns the square of the modulus of a complex number
+// modulus = distance from the centre of the complex plane
 static double complexModSquared (complex c) {
     return c.re * c.re + c.im * c.im;
 }
