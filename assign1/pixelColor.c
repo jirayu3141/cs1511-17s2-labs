@@ -24,9 +24,6 @@
 // Add a colour ID for each range
 #define RANGE_1_COLOR   WHITE
 
-// Function Prototypes
-pixel getColor (int colorID);
-
 
 // This function should take a number (of steps taken to escape the
 // Mandelbrot set), and convert it to a color.
@@ -34,11 +31,11 @@ pixel getColor (int colorID);
 // You have artistic licence here, so make your Mandelbrot look amazing.
 pixel pixelColor (int steps) {
     
-    pixel color = black; // Initialisation
+    pixel color = BLACK; // Initialisation
     
     // Numbers inside the Mandelbrot set are coloured black.
     if (steps == NO_ESCAPE) {
-        color = black;
+        color = BLACK;
         
         // Add a new condition for each step range that you add
     } else if (steps >= RANGE_1_LOWER && steps <= RANGE_1_UPPER) {
